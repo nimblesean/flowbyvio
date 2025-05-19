@@ -507,21 +507,21 @@
           },
           {
             id: "orchids",
-            name: "Bucket uang ( belum termasuk uang ) ",
+            name: "Bucket uang (belum termasuk uang)",
             price: 65000,
             desc: "PEMESANAN PO H-5 WAJIB DP.",
             image: "img5.jpeg",
           },
           {
             id: "sunflowers",
-            name: "Bunga tangkai mini ",
+            name: "Bunga tangkai mini",
             price: 10000,
             desc: "PEMESANAN PO H-5 WAJIB DP.",
             image: "img4.jpeg",
           },
           {
             id: "sunflowers",
-            name: "Bunga tangkai panjang ",
+            name: "Bunga tangkai panjang",
             price: 12000,
             desc: "PEMESANAN PO H-5 WAJIB DP.",
             image: "img3.jpeg",
@@ -543,7 +543,7 @@
         const ordersList = document.getElementById("orders-list");
 
         // No WhatsApp penjual - ganti dengan nomor Anda (format internasional tanpa tanda + dan spasi)
-        const sellerWhatsappNumber = "6282185959648";
+        const sellerWhatsappNumber = "6289560488791"; // Ganti dengan nomor WhatsApp Anda
 
         // Render produk ke halaman
         function renderProducts() {
@@ -614,12 +614,16 @@
 
           const orderEl = document.createElement("div");
           orderEl.className = "order-item";
-          orderEl.textContent = `Produk: ${order.productName} | Penerima: ${
-            order.recipient
-          } | Jumlah: ${
-            order.quantity
-          } | Total: Rp ${order.totalPrice.toLocaleString("id-ID")}`;
-          ordersList.appendChild(orderEl);
+          orderEl.innerHTML = `
+            <p><strong>Produk:</strong> ${order.productName}</p>
+            <p><strong>Penerima:</strong> ${order.recipient}</p>
+            <p><strong>Jumlah:</strong> ${order.quantity}</p>
+            <p><strong>Total:</strong> Rp ${order.totalPrice.toLocaleString(
+              "id-ID"
+            )}</p>
+            <p><small>${new Date().toLocaleString()}</small></p>
+          `;
+          ordersList.prepend(orderEl);
         }
 
         // Event listener form
@@ -690,11 +694,14 @@
             const message =
               `Halo VIOFLORIST,%0A%0A` +
               `Saya ingin memesan bunga dengan detail berikut:%0A%0A` +
-              `*Produk*: ${product.name}%0A` +
-              `*Nama Penerima*: ${recipient}%0A` +
-              `*Jumlah*: ${quantity}%0A` +
-              `*Total Harga*: Rp ${totalPrice.toLocaleString("id-ID")}%0A%0A` +
-              `Mohon konfirmasi ketersediaan dan waktu pengiriman.%0A` +
+              `*Jenis Produk*: ${product.name}%0A` +
+              `*Harga Satuan*: Rp ${product.price.toLocaleString("id-ID")}%0A` +
+              `*Jumlah Pesanan*: ${quantity}%0A` +
+              `*Total Harga*: Rp ${totalPrice.toLocaleString("id-ID")}%0A` +
+              `*Nama Penerima*: ${recipient}%0A%0A` +
+              `*Catatan Tambahan*:%0A` +
+              `- ${product.desc}%0A` +
+              `- Mohon konfirmasi ketersediaan dan waktu pengiriman%0A%0A` +
               `Terima kasih.`;
 
             const waLink = `https://wa.me/${sellerWhatsappNumber}?text=${message}`;
