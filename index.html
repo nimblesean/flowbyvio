@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>VIOFLORIST - Florist Flower Order</title>
+    <!-- Tambahkan SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
       /* Reset & base */
       * {
@@ -141,7 +143,7 @@
 
       .products-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
         gap: 2rem;
       }
 
@@ -166,6 +168,19 @@
       .product-card:focus-within {
         transform: translateY(-10px);
         box-shadow: 0 8px 20px #ff6f9155;
+      }
+
+      .product-image {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+        transition: transform 0.3s ease;
+      }
+
+      .product-card:hover .product-image {
+        transform: scale(1.05);
       }
 
       .product-card h4 {
@@ -349,6 +364,9 @@
         .hero {
           padding: 3rem 1rem;
         }
+        .products-grid {
+          grid-template-columns: 1fr;
+        }
       }
     </style>
   </head>
@@ -457,16 +475,9 @@
         </form>
       </section>
 
-      <section
-        id="admin-report"
-        class="admin-report container"
-        aria-live="polite"
-        aria-label="Laporan Admin"
-      >
+      <section id="admin-report" class="admin-report container">
         <h3>Laporan Admin</h3>
-        <div id="orders-list" tabindex="0">
-          <p>Belum ada pesanan.</p>
-        </div>
+        <div id="orders-list">Belum ada pesanan</div>
       </section>
     </main>
 
@@ -476,37 +487,47 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
-        // Produk bunga dengan nama, harga, dan deskripsi singkat
+        // Produk bunga dengan nama, harga, deskripsi, dan gambar
         const products = [
           {
             id: "roses",
             name: "Buket Mawar Merah",
             price: 150000,
             desc: "Romantis dengan mawar merah segar.",
+            image:
+              "https://images.unsplash.com/photo-1559563362-c667ba5f5480?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
           },
           {
             id: "lilies",
             name: "Buket Lily Putih",
             price: 180000,
             desc: "Elegan dan murni, lily putih cantik.",
+            image:
+              "https://images.unsplash.com/photo-1596464716127-f2a82984de30?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
           },
           {
             id: "tulips",
             name: "Buket Tulip Warna-warni",
             price: 130000,
             desc: "Penuh warna dan keceriaan tulip.",
+            image:
+              "https://images.unsplash.com/photo-1526397751294-331021109fbd?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
           },
           {
             id: "orchids",
             name: "Buket Anggrek Eksklusif",
             price: 220000,
             desc: "Anggrek mewah untuk kesan spesial.",
+            image:
+              "https://images.unsplash.com/photo-1579154344581-0dcc2a7c9f25?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
           },
           {
             id: "sunflowers",
             name: "Buket Bunga Matahari",
             price: 140000,
             desc: "Bunga cerah pembawa semangat.",
+            image:
+              "https://images.unsplash.com/photo-1597848212624-a19eb35e2651?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
           },
         ];
 
@@ -517,10 +538,10 @@
         const orderForm = document.getElementById("order-form");
         const ordersList = document.getElementById("orders-list");
 
-        // No WhatsApp penjual - ganti sesuai keperluan (format internasional tanpa tanda + dan spasi)
+        // No WhatsApp penjual - ganti dengan nomor Anda (format internasional tanpa tanda + dan spasi)
         const sellerWhatsappNumber = "6282185959648";
 
-        // Render produk ke halaman, lengkap dengan deskripsi
+        // Render produk ke halaman
         function renderProducts() {
           productsGrid.innerHTML = "";
           products.forEach((product) => {
@@ -530,13 +551,16 @@
             card.setAttribute("role", "button");
             card.setAttribute("aria-pressed", "false");
             card.innerHTML = `
-            <div class="product-hover-bg"></div>
-            <h4>${product.name}</h4>
-            <p class="product-price">Rp ${product.price.toLocaleString(
-              "id-ID"
-            )}</p>
-            <p class="product-desc">${product.desc}</p>
-          `;
+              <div class="product-hover-bg"></div>
+              <img src="${product.image}" alt="${
+              product.name
+            }" class="product-image">
+              <h4>${product.name}</h4>
+              <p class="product-price">Rp ${product.price.toLocaleString(
+                "id-ID"
+              )}</p>
+              <p class="product-desc">${product.desc}</p>
+            `;
             card.addEventListener("click", () => {
               productSelect.value = product.id;
               updateTotalPrice();
@@ -601,7 +625,7 @@
           }
         });
 
-        orderForm.addEventListener("submit", (e) => {
+        orderForm.addEventListener("submit", async (e) => {
           e.preventDefault();
 
           const selectedId = productSelect.value;
@@ -612,49 +636,93 @@
           const product = products.find((p) => p.id === selectedId);
 
           if (!product) {
-            alert("Pilih kategori bunga yang valid.");
+            Swal.fire({
+              icon: "error",
+              title: "Peringatan",
+              text: "Pilih kategori bunga yang valid!",
+              confirmButtonColor: "#ff1a56",
+            });
             return;
           }
           if (!recipient) {
-            alert("Masukkan nama penerima.");
+            Swal.fire({
+              icon: "error",
+              title: "Peringatan",
+              text: "Masukkan nama penerima!",
+              confirmButtonColor: "#ff1a56",
+            });
             return;
           }
           if (quantity <= 0) {
-            alert("Jumlah pemesanan harus minimal 1.");
+            Swal.fire({
+              icon: "error",
+              title: "Peringatan",
+              text: "Jumlah pemesanan harus minimal 1!",
+              confirmButtonColor: "#ff1a56",
+            });
             return;
           }
 
           const totalPrice = product.price * quantity;
 
-          // Tambah ke laporan admin di halaman
-          addOrderToAdminReport({
-            productName: product.name,
-            recipient,
-            quantity,
-            totalPrice,
+          // Tampilkan konfirmasi sebelum mengarahkan ke WhatsApp
+          const result = await Swal.fire({
+            title: "Konfirmasi Pesanan",
+            html: `Anda akan memesan:<br>
+                  <b>${product.name}</b><br>
+                  Untuk: <b>${recipient}</b><br>
+                  Jumlah: <b>${quantity}</b><br>
+                  Total: <b>Rp ${totalPrice.toLocaleString("id-ID")}</b>`,
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonText: "Lanjut ke WhatsApp",
+            cancelButtonText: "Periksa Kembali",
+            confirmButtonColor: "#ff1a56",
+            cancelButtonColor: "#6c757d",
           });
 
-          // Persiapan teks pesan WhatsApp (encode URL dengan %0A untuk baris baru)
-          const message =
-            `Halo VIOFLORIST,%0A` +
-            `Saya telah melakukan pemesanan dengan detail:%0A` +
-            `- Produk: ${product.name}%0A` +
-            `- Nama Penerima: ${recipient}%0A` +
-            `- Jumlah: ${quantity}%0A` +
-            `- Total Harga: Rp ${totalPrice.toLocaleString("id-ID")}%0A%0A` +
-            `Terima kasih.`;
+          if (result.isConfirmed) {
+            // Persiapan teks pesan WhatsApp
+            const message =
+              `Halo VIOFLORIST,%0A%0A` +
+              `Saya ingin memesan bunga dengan detail berikut:%0A%0A` +
+              `*Produk*: ${product.name}%0A` +
+              `*Nama Penerima*: ${recipient}%0A` +
+              `*Jumlah*: ${quantity}%0A` +
+              `*Total Harga*: Rp ${totalPrice.toLocaleString("id-ID")}%0A%0A` +
+              `Mohon konfirmasi ketersediaan dan waktu pengiriman.%0A` +
+              `Terima kasih.`;
 
-          const waLink = `https://wa.me/${sellerWhatsappNumber}?text=${message}`;
+            const waLink = `https://wa.me/${sellerWhatsappNumber}?text=${message}`;
 
-          // Arahkan ke WhatsApp di tab baru dengan pesan siap kirim
-          window.open(waLink, "_blank");
+            // Tambah ke laporan admin di halaman
+            addOrderToAdminReport({
+              productName: product.name,
+              recipient,
+              quantity,
+              totalPrice,
+            });
 
-          // Reset form
-          orderForm.reset();
-          totalPriceInput.value = "0";
-          productSelect.focus();
+            // Arahkan ke WhatsApp di tab baru
+            window.open(waLink, "_blank");
+
+            // Reset form
+            orderForm.reset();
+            totalPriceInput.value = "0";
+            productSelect.focus();
+
+            // Tampilkan notifikasi sukses
+            Swal.fire({
+              icon: "success",
+              title: "Pesanan Terkirim!",
+              text: "Anda akan diarahkan ke WhatsApp untuk konfirmasi pesanan",
+              confirmButtonColor: "#ff1a56",
+              timer: 3000,
+            });
+          }
         });
 
+        // Inisialisasi
         renderProducts();
         renderProductOptions();
         updateTotalPrice();
