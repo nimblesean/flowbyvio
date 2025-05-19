@@ -436,7 +436,7 @@
             >Pilih kategori bunga yang ingin dipesan</span
           >
 
-          <label for="recipient-name">Nama Penerima:</label>
+          <label for="recipient-name">Nama Customer:</label>
           <input
             type="text"
             id="recipient-name"
@@ -467,6 +467,19 @@
             value="0"
             aria-live="polite"
             aria-atomic="true"
+          />
+
+          <label for="recipient-name"
+            >Catatan (REQ, Alamat Customer jika Sistem COD):</label
+          >
+          <input
+            type="text"
+            id="recipient-name"
+            name="recipient-name"
+            placeholder="Masukkan catatan"
+            required
+            autocomplete="off"
+            aria-required="true"
           />
 
           <button type="submit" class="btn-order" aria-label="Pesan Sekarang">
@@ -501,7 +514,7 @@
             name: "Bucket graduation jumbo",
             price: 155000,
             desc: "PEMESANAN PO H-5 WAJIB DP.",
-            image: "img7.jpeg",
+            image: " Img7.jpeg",
           },
           {
             id: "tulips",
@@ -548,7 +561,7 @@
         const ordersList = document.getElementById("orders-list");
 
         // No WhatsApp penjual - ganti dengan nomor Anda (format internasional tanpa tanda + dan spasi)
-        const sellerWhatsappNumber = "6281632189929"; // Ganti dengan nomor WhatsApp Anda
+        const sellerWhatsappNumber = "62895604858791"; // Ganti dengan nomor WhatsApp Anda
 
         // Render produk ke halaman
         function renderProducts() {
