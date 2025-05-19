@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>VIOFLORIST - Florist Flower Order</title>
+    <style>
+      /* Reset & base */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Poppins", sans-serif;
+      }
+
+      body {
+        background: linear-gradient(135deg, #fde8e8, #fff5f5);
+        color: #333;
+        line-height: 1.6;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Container */
+      .container {
+        width: 90%;
+        max-width: 1100px;
+        margin: 0 auto;
+        padding-left: 15px;
+        padding-right: 15px;
+      }
+
+      /* Navbar */
+      .navbar {
+        background-color: #ff6f91;
+        box-shadow: 0 4px 8px rgba(255, 111, 145, 0.3);
+        padding: 1rem 0;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        animation: slideDown 0.7s ease forwards;
+      }
+
+      @keyframes slideDown {
+        from {
+          transform: translateY(-100%);
+        }
+        to {
+          transform: translateY(0);
+        }
+      }
+
+      .logo {
+        color: #fff;
+        font-weight: 900;
+        font-size: 2rem;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        user-select: none;
+      }
+
+      .navbar .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .nav-links {
+        list-style: none;
+        display: flex;
+        gap: 1.5rem;
+      }
+
+      .nav-links li a {
+        color: #fff;
+        font-weight: 600;
+        text-decoration: none;
+        text-transform: uppercase;
+        transition: color 0.3s;
+        letter-spacing: 1px;
+      }
+
+      .nav-links li a:hover,
+      .nav-links li a:focus {
+        color: #fff;
+        text-shadow: 0 0 10px #fff8;
+      }
+
+      /* Hero Section */
+      .hero {
+        background: url("https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1350&q=80")
+          no-repeat center center/cover;
+        padding: 5rem 0;
+        color: white;
+        text-align: center;
+        box-shadow: inset 0 0 0 1000px rgba(255, 111, 145, 0.6);
+      }
+
+      .hero h2 {
+        font-size: 2.8rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        animation: fadeInUp 1s ease forwards;
+      }
+
+      .hero p {
+        font-size: 1.25rem;
+        font-weight: 400;
+        animation: fadeInUp 1.2s ease forwards;
+        animation-delay: 0.3s;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Products Section */
+      .products-section {
+        padding: 3rem 0;
+        background-color: #fff0f4;
+        border-radius: 10px;
+        box-shadow: 0 0 25px #ffc0cb44;
+        margin-bottom: 3rem;
+      }
+
+      .products-section h3 {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 2rem;
+        text-align: center;
+        color: #ff367c;
+      }
+
+      .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 2rem;
+      }
+
+      .product-card {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        text-align: center;
+        box-shadow: 0 4px 12px #ff6f9130;
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        outline-offset: 4px;
+      }
+
+      .product-card:focus-visible {
+        outline: 3px solid #ff6384;
+      }
+
+      .product-card:hover,
+      .product-card:focus-within {
+        transform: translateY(-10px);
+        box-shadow: 0 8px 20px #ff6f9155;
+      }
+
+      .product-card h4 {
+        font-size: 1.25rem;
+        margin-bottom: 0.5rem;
+        color: #d33a6e;
+      }
+
+      .product-price {
+        font-weight: 700;
+        font-size: 1.1rem;
+        color: #ff367c;
+        user-select: none;
+        margin-bottom: 0;
+      }
+
+      .product-desc {
+        font-size: 0.9rem;
+        color: #666;
+        margin-top: 0.5rem;
+      }
+
+      .product-hover-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, #ff91b4aa, #ff6f91cc);
+        pointer-events: none;
+        z-index: 0;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        border-radius: 15px;
+      }
+
+      .product-card:hover .product-hover-bg,
+      .product-card:focus-within .product-hover-bg {
+        opacity: 1;
+      }
+
+      /* Order Section */
+      .order-section {
+        background-color: #ffc0d1;
+        border-radius: 10px;
+        padding: 2rem;
+        box-shadow: 0 0 25px #ff6f9180;
+        margin-bottom: 3rem;
+      }
+
+      .order-section h3 {
+        color: #880638;
+        font-weight: 700;
+        font-size: 2rem;
+        text-align: center;
+        margin-bottom: 1.5rem;
+        text-shadow: 0 0 10px #ffb1cecc;
+      }
+
+      form#order-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+        max-width: 480px;
+        margin: 0 auto;
+      }
+
+      label {
+        font-weight: 600;
+        font-size: 1.1rem;
+        color: #66032d;
+      }
+
+      select,
+      input[type="text"],
+      input[type="number"],
+      input[readonly] {
+        border: 2px solid #ff6384;
+        border-radius: 8px;
+        padding: 0.6rem 1rem;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+      }
+
+      select:focus,
+      input[type="text"]:focus,
+      input[type="number"]:focus {
+        outline: none;
+        border-color: #ff1a56;
+        box-shadow: 0 0 10px #ff6384aa;
+      }
+
+      input[readonly] {
+        background: #ffe5ec;
+        cursor: not-allowed;
+        color: #990436;
+        font-weight: 700;
+      }
+
+      .btn-order {
+        background-color: #ff1a56;
+        color: white;
+        font-weight: 700;
+        font-size: 1.2rem;
+        border: none;
+        cursor: pointer;
+        border-radius: 12px;
+        padding: 0.75rem 0;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+      }
+
+      .btn-order:focus-visible {
+        outline: 3px solid #ff6384;
+        outline-offset: 2px;
+      }
+
+      .btn-order:hover,
+      .btn-order:focus {
+        background-color: #b8083b;
+        transform: scale(1.05);
+        box-shadow: 0 0 12px #b8083bcc;
+      }
+
+      /* Admin Report */
+      .admin-report {
+        background-color: #ffe6f0;
+        border-radius: 10px;
+        padding: 2rem;
+        box-shadow: 0 0 25px #ffadbdcc;
+        margin-bottom: 3rem;
+      }
+
+      .admin-report h3 {
+        font-size: 2rem;
+        font-weight: 700;
+        text-align: center;
+        color: #b3003b;
+        margin-bottom: 1rem;
+        text-shadow: 0 0 6px #ff3399aa;
+      }
+
+      #orders-list {
+        max-height: 300px;
+        overflow-y: auto;
+        font-size: 1rem;
+        color: #66032d;
+      }
+
+      .order-item {
+        background-color: #ffd6e8;
+        margin: 0.5rem 0;
+        padding: 0.75rem 1rem;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px #c7155799;
+        transition: background-color 0.3s ease;
+      }
+
+      .order-item:hover,
+      .order-item:focus-visible {
+        background-color: #ffb0ce;
+        outline: none;
+      }
+
+      /* Footer */
+      .footer {
+        background-color: #ff6f91;
+        color: white;
+        text-align: center;
+        padding: 1rem 0;
+        font-weight: 600;
+        letter-spacing: 1.2px;
+        margin-top: auto;
+        user-select: none;
+      }
+
+      /* Responsive */
+      @media (max-width: 600px) {
+        .nav-links {
+          display: none; /* For simplicity */
+        }
+        .hero {
+          padding: 3rem 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar" role="navigation" aria-label="Main Navigation">
+      <div class="container">
+        <h1 class="logo" tabindex="0">FlowByVio</h1>
+        <ul class="nav-links" role="menubar">
+          <li role="none">
+            <a href="#products" role="menuitem" tabindex="0">Produk</a>
+          </li>
+          <li role="none">
+            <a href="#order-section" role="menuitem" tabindex="0">Pesan</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <header
+      class="hero"
+      role="banner"
+      aria-label="Selamat Datang di VIOFLORIST"
+    >
+      <div class="container">
+        <h2>Selamat Datang di VIOFLORIST</h2>
+        <p>Pemesanan bunga cantik untuk setiap momen spesial Anda</p>
+      </div>
+    </header>
+
+    <main>
+      <section
+        id="products"
+        class="products-section container"
+        tabindex="0"
+        aria-label="Produk Kami"
+      >
+        <h3>Produk Kami</h3>
+        <div class="products-grid" aria-live="polite" aria-relevant="additions">
+          <!-- Produk akan dimasukkan oleh JavaScript -->
+        </div>
+      </section>
+
+      <section
+        id="order-section"
+        class="order-section container"
+        aria-labelledby="order-title"
+      >
+        <h3 id="order-title">Pesan Sekarang</h3>
+        <form id="order-form" aria-label="Formulir Pemesanan Bunga">
+          <label for="product-select">Kategori Bunga:</label>
+          <select
+            id="product-select"
+            name="product-select"
+            required
+            aria-required="true"
+            aria-describedby="product-desc"
+          >
+            <option value="" disabled selected>Pilih bunga</option>
+            <!-- Opsi akan dimasukkan oleh JavaScript -->
+          </select>
+          <span id="product-desc" class="sr-only"
+            >Pilih kategori bunga yang ingin dipesan</span
+          >
+
+          <label for="recipient-name">Nama Penerima:</label>
+          <input
+            type="text"
+            id="recipient-name"
+            name="recipient-name"
+            placeholder="Masukkan nama penerima"
+            required
+            autocomplete="off"
+            aria-required="true"
+          />
+
+          <label for="quantity">Jumlah Dipesan:</label>
+          <input
+            type="number"
+            id="quantity"
+            name="quantity"
+            min="1"
+            value="1"
+            required
+            aria-required="true"
+          />
+
+          <label for="total-price">Total Harga:</label>
+          <input
+            type="text"
+            id="total-price"
+            name="total-price"
+            readonly
+            value="0"
+            aria-live="polite"
+            aria-atomic="true"
+          />
+
+          <button type="submit" class="btn-order" aria-label="Pesan Sekarang">
+            Pesan Sekarang
+          </button>
+        </form>
+      </section>
+
+
+    <footer class="footer container" role="contentinfo">
+      <p>&copy; 2024 VIOFLORIST. All rights reserved.</p>
+    </footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // Produk bunga dengan nama, harga, dan deskripsi singkat
+        const products = [
+          {
+            id: "roses",
+            name: "Buket Mawar Merah",
+            price: 150000,
+            desc: "Romantis dengan mawar merah segar.",
+          },
+          {
+            id: "lilies",
+            name: "Buket Lily Putih",
+            price: 180000,
+            desc: "Elegan dan murni, lily putih cantik.",
+          },
+          {
+            id: "tulips",
+            name: "Buket Tulip Warna-warni",
+            price: 130000,
+            desc: "Penuh warna dan keceriaan tulip.",
+          },
+          {
+            id: "orchids",
+            name: "Buket Anggrek Eksklusif",
+            price: 220000,
+            desc: "Anggrek mewah untuk kesan spesial.",
+          },
+          {
+            id: "sunflowers",
+            name: "Buket Bunga Matahari",
+            price: 140000,
+            desc: "Bunga cerah pembawa semangat.",
+          },
+        ];
+
+        const productsGrid = document.querySelector(".products-grid");
+        const productSelect = document.getElementById("product-select");
+        const quantityInput = document.getElementById("quantity");
+        const totalPriceInput = document.getElementById("total-price");
+        const orderForm = document.getElementById("order-form");
+        const ordersList = document.getElementById("orders-list");
+
+        // No WhatsApp penjual - ganti sesuai keperluan (format internasional tanpa tanda + dan spasi)
+        const sellerWhatsappNumber = "6282185959648";
+
+        // Render produk ke halaman, lengkap dengan deskripsi
+        function renderProducts() {
+          productsGrid.innerHTML = "";
+          products.forEach((product) => {
+            const card = document.createElement("article");
+            card.className = "product-card";
+            card.tabIndex = 0;
+            card.setAttribute("role", "button");
+            card.setAttribute("aria-pressed", "false");
+            card.innerHTML = `
+            <div class="product-hover-bg"></div>
+            <h4>${product.name}</h4>
+            <p class="product-price">Rp ${product.price.toLocaleString(
+              "id-ID"
+            )}</p>
+            <p class="product-desc">${product.desc}</p>
+          `;
+            card.addEventListener("click", () => {
+              productSelect.value = product.id;
+              updateTotalPrice();
+              productSelect.focus();
+            });
+            card.addEventListener("keypress", (e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                card.click();
+              }
+            });
+            productsGrid.appendChild(card);
+          });
+        }
+
+        // Isi dropdown select produk
+        function renderProductOptions() {
+          products.forEach((product) => {
+            const option = document.createElement("option");
+            option.value = product.id;
+            option.textContent = `${
+              product.name
+            } - Rp ${product.price.toLocaleString("id-ID")}`;
+            productSelect.appendChild(option);
+          });
+        }
+
+        // Update total harga berdasarkan produk dan jumlah
+        function updateTotalPrice() {
+          const selectedId = productSelect.value;
+          const qty = parseInt(quantityInput.value) || 0;
+          const product = products.find((p) => p.id === selectedId);
+          if (product && qty > 0) {
+            totalPriceInput.value = `Rp ${(product.price * qty).toLocaleString(
+              "id-ID"
+            )}`;
+          } else {
+            totalPriceInput.value = "0";
+          }
+        }
+
+        // Tambah pesanan ke list laporan admin
+        function addOrderToAdminReport(order) {
+          if (ordersList.textContent.includes("Belum ada pesanan")) {
+            ordersList.innerHTML = "";
+          }
+
+          const orderEl = document.createElement("div");
+          orderEl.className = "order-item";
+          orderEl.textContent = `Produk: ${order.productName} | Penerima: ${
+            order.recipient
+          } | Jumlah: ${
+            order.quantity
+          } | Total: Rp ${order.totalPrice.toLocaleString("id-ID")}`;
+          ordersList.appendChild(orderEl);
+        }
+
+        // Event listener form
+        orderForm.addEventListener("input", (e) => {
+          if (["product-select", "quantity"].includes(e.target.id)) {
+            updateTotalPrice();
+          }
+        });
+
+        orderForm.addEventListener("submit", (e) => {
+          e.preventDefault();
+
+          const selectedId = productSelect.value;
+          const recipient = document
+            .getElementById("recipient-name")
+            .value.trim();
+          const quantity = parseInt(quantityInput.value);
+          const product = products.find((p) => p.id === selectedId);
+
+          if (!product) {
+            alert("Pilih kategori bunga yang valid.");
+            return;
+          }
+          if (!recipient) {
+            alert("Masukkan nama penerima.");
+            return;
+          }
+          if (quantity <= 0) {
+            alert("Jumlah pemesanan harus minimal 1.");
+            return;
+          }
+
+          const totalPrice = product.price * quantity;
+
+          // Tambah ke laporan admin di halaman
+          addOrderToAdminReport({
+            productName: product.name,
+            recipient,
+            quantity,
+            totalPrice,
+          });
+
+          // Persiapan teks pesan WhatsApp (encode URL dengan %0A untuk baris baru)
+          const message =
+            `Halo VIOFLORIST,%0A` +
+            `Saya telah melakukan pemesanan dengan detail:%0A` +
+            `- Produk: ${product.name}%0A` +
+            `- Nama Penerima: ${recipient}%0A` +
+            `- Jumlah: ${quantity}%0A` +
+            `- Total Harga: Rp ${totalPrice.toLocaleString("id-ID")}%0A%0A` +
+            `Terima kasih.`;
+
+          const waLink = `https://wa.me/${sellerWhatsappNumber}?text=${message}`;
+
+          // Arahkan ke WhatsApp di tab baru dengan pesan siap kirim
+          window.open(waLink, "_blank");
+
+          // Reset form
+          orderForm.reset();
+          totalPriceInput.value = "0";
+          productSelect.focus();
+        });
+
+        renderProducts();
+        renderProductOptions();
+        updateTotalPrice();
+      });
+    </script>
+  </body>
+</html>
