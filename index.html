@@ -474,11 +474,6 @@
           </button>
         </form>
       </section>
-
-      <section id="admin-report" class="admin-report container">
-        <h3>Laporan Admin</h3>
-        <div id="orders-list">Belum ada pesanan</div>
-      </section>
     </main>
 
     <footer class="footer container" role="contentinfo">
@@ -491,43 +486,52 @@
         const products = [
           {
             id: "roses",
-            name: "Buket Mawar Merah",
-            price: 150000,
-            desc: "Romantis dengan mawar merah segar.",
-            image:
-              "https://images.unsplash.com/photo-1559563362-c667ba5f5480?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+            name: "Bucket graduation mini",
+            price: 40000,
+            desc: "PEMESANAN PO H-5 WAJIB DP.",
+            image: "img/img1.jpeg",
           },
           {
             id: "lilies",
-            name: "Buket Lily Putih",
-            price: 180000,
-            desc: "Elegan dan murni, lily putih cantik.",
-            image:
-              "https://images.unsplash.com/photo-1596464716127-f2a82984de30?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+            name: "Bucket graduation jumbo",
+            price: 155000,
+            desc: "PEMESANAN PO H-5 WAJIB DP.",
+            image: "img/img7.jpeg",
           },
           {
             id: "tulips",
-            name: "Buket Tulip Warna-warni",
-            price: 130000,
-            desc: "Penuh warna dan keceriaan tulip.",
-            image:
-              "https://images.unsplash.com/photo-1526397751294-331021109fbd?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+            name: "Bucket foto",
+            price: 80000,
+            desc: "PEMESANAN PO H-5 WAJIB DP.",
+            image: "img/img6.jpeg",
           },
           {
             id: "orchids",
-            name: "Buket Anggrek Eksklusif",
-            price: 220000,
-            desc: "Anggrek mewah untuk kesan spesial.",
-            image:
-              "https://images.unsplash.com/photo-1579154344581-0dcc2a7c9f25?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+            name: "Bucket uang ( belum termasuk uang ) ",
+            price: 65000,
+            desc: "PEMESANAN PO H-5 WAJIB DP.",
+            image: "img/img5.jpeg",
           },
           {
             id: "sunflowers",
-            name: "Buket Bunga Matahari",
-            price: 140000,
-            desc: "Bunga cerah pembawa semangat.",
-            image:
-              "https://images.unsplash.com/photo-1597848212624-a19eb35e2651?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+            name: "Bunga tangkai mini ",
+            price: 10000,
+            desc: "PEMESANAN PO H-5 WAJIB DP.",
+            image: "img/img4.jpeg",
+          },
+          {
+            id: "sunflowers",
+            name: "Bunga tangkai panjang ",
+            price: 12000,
+            desc: "PEMESANAN PO H-5 WAJIB DP.",
+            image: "img/img3.jpeg",
+          },
+          {
+            id: "sunflowers",
+            name: "Buket cantul",
+            price: 40000,
+            desc: "PEMESANAN PO H-5 WAJIB DP.",
+            image: "img/img2.jpeg",
           },
         ];
 
@@ -539,7 +543,7 @@
         const ordersList = document.getElementById("orders-list");
 
         // No WhatsApp penjual - ganti dengan nomor Anda (format internasional tanpa tanda + dan spasi)
-        const sellerWhatsappNumber = "6282185959648";
+        const sellerWhatsappNumber = "62895604858791";
 
         // Render produk ke halaman
         function renderProducts() {
